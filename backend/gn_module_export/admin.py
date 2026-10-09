@@ -3,7 +3,7 @@ from gn_module_export.utils_export import ExportRequest
 from markupsafe import Markup
 from pathlib import Path
 from datetime import datetime
-from flask_admin.babel import gettext
+from flask_babel import gettext, lazy_gettext as _l
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.helpers import is_form_submitted
 from geonature.core.admin.admin import CruvedProtectedMixin
@@ -36,10 +36,10 @@ class LicenceView(CruvedProtectedMixin, ModelView):
         super(LicenceView, self).__init__(Licences, session, **kwargs)
 
     form_excluded_columns = "exports"
-    column_labels = dict(name_licence="Nom de la licence", url_licence="URL de la licence")
+    column_labels = dict(name_licence=_l("Nom de la licence"), url_licence=_l("URL de la licence"))
     column_descriptions = dict(
-        name_licence="Nom de la licence",
-        url_licence="URL de la documentation de la licence",
+        name_licence=_l("Nom de la licence"),
+        url_licence=_l("URL de la documentation de la licence"),
     )
 
 
@@ -69,7 +69,7 @@ class ExportView(CruvedProtectedMixin, ModelView):
 
     def format_user_role(user):
         if user.groupe:
-            val = "Groupe : {}".format(user.nom_role)
+            val = gettext("Groupe : {}").format(user.nom_role)
         else:
             val = "{nom} {prenom} - ({email})".format(
                 nom=user.nom_role,
@@ -82,7 +82,7 @@ class ExportView(CruvedProtectedMixin, ModelView):
         val_list = []
         for user in model.allowed_roles:
             if user.groupe:
-                val = "Groupe : {}".format(user.nom_role)
+                val = gettext("Groupe : {}").format(user.nom_role)
             else:
                 val = "{nom} {prenom} - ({email})".format(
                     nom=user.nom_role,
@@ -119,31 +119,34 @@ class ExportView(CruvedProtectedMixin, ModelView):
         "cor_roles_exports",
     ]
     column_searchable_list = ("label",)
+
     column_formatters_detail = {"cor_roles_exports": _token_formatter}
     column_formatters = {
         "allowed_roles": list_label_allowed_role_formatter,
     }
 
     column_labels = dict(
-        id="Identifiant",
-        label="Nom de l'export",
-        schema_name="Nom du schema PostgreSQL",
-        view_name="Nom de la vue SQL",
-        view_pk_column="Nom de colonne d'unicité de la vue",
+        id=_l("Identifiant"),
+        label=_l("Nom de l'export"),
+        schema_name=_l("Nom du schema PostgreSQL"),
+        view_name=_l("Nom de la vue SQL"),
+        view_pk_column=_l("Nom de colonne d'unicité de la vue"),
         desc="Description",
-        geometry_field="Nom de champ géométrique",
-        geometry_srid="SRID du champ géométrique",
-        allowed_roles="Nom du role",
-        cor_roles_exports="Role et token associé à l'export",
+        geometry_field=_l("Nom de champ géométrique"),
+        geometry_srid=_l("SRID du champ géométrique"),
+        allowed_roles=_l("Nom du role"),
+        cor_roles_exports=_l("Role et token associé à l'export"),
     )
     column_descriptions = dict(
-        label="Nom libre de l'export",
-        schema_name="Nom exact du schéma PostgreSQL contenant la vue SQL.",
-        view_name="Nom exact de la vue SQL permettant l'export de vos données.",
-        view_pk_column="Nom exact de la colonne d'unicité de la vue. Si non renseigné, la première colonne sera utilisée pour les exports.",
-        desc="Décrit la nature de l'export",
-        public="L'export est accessible à tous",
-        allowed_roles="Role associé à l'export",
+        label=_l("Nom libre de l'export"),
+        schema_name=_l("Nom exact du schéma PostgreSQL contenant la vue SQL."),
+        view_name=_l("Nom exact de la vue SQL permettant l'export de vos données."),
+        view_pk_column=_l(
+            "Nom exact de la colonne d'unicité de la vue. Si non renseigné, la première colonne sera utilisée pour les exports."
+        ),
+        desc=_l("Décrit la nature de l'export"),
+        public=_l("L'export est accessible à tous"),
+        allowed_roles=_l("Role associé à l'export"),
     )
     form_columns = (
         "label",
@@ -234,14 +237,14 @@ class ExportSchedulesView(CruvedProtectedMixin, ModelView):
 
     column_list = ["export", "frequency", "format", "last_export", "generate"]
     column_descriptions = dict(
-        export="Nom de l'export à planifier",
-        frequency="Fréquence de la génération de l'export (en jours)",
-        format="Format de l'export à générer",
+        export=_l("Nom de l'export à planifier"),
+        frequency=_l("Fréquence de la génération de l'export (en jours)"),
+        format=_l("Format de l'export à générer"),
     )
     column_labels = {
         "generate": "",
-        "last_export": "Date du dernier export",
-        "frequency": "Fréquence",
+        "last_export": _l("Date du dernier export"),
+        "frequency": _l("Fréquence"),
     }
 
     def _last_export_formatter(view, context, model, name):
@@ -272,7 +275,13 @@ class ExportSchedulesView(CruvedProtectedMixin, ModelView):
         """
         html_output = ""
         if not model.is_export_available():
-            html_output = "<span style='color:red'>SRID ou Champs géométrique manquant : impossible de générer l'export dans ce format.</span>"
+            html_output = (
+                "<span style='color:red'>"
+                + gettext(
+                    "SRID ou Champs géométrique manquant : impossible de générer l'export dans ce format."
+                )
+                + "</span>"
+            )
         else:
             link_to_generate = url_for(
                 "exports.forceScheduleExport",
@@ -282,7 +291,9 @@ class ExportSchedulesView(CruvedProtectedMixin, ModelView):
             next_ = url_for("exportschedules.index_view")
             link_to_generate = "" if model.in_process else f"{link_to_generate}?next={next_}"
             css_class = "btn-light disabled" if model.in_process else "btn-primary"
-            btn_content = "Génération en cours..." if model.in_process else "Générer"
+            btn_content = (
+                gettext("Génération en cours...") if model.in_process else gettext("Générer")
+            )
             html_output += (
                 f"<a href='{link_to_generate}' class='btn m-1 {css_class}'>{btn_content}</a>"
             )
@@ -328,7 +339,7 @@ class ExportSchedulesView(CruvedProtectedMixin, ModelView):
 
 
 flask_admin.add_view(ExportView(DB.session, name="Exports", category="Export"))
-flask_admin.add_view(LicenceView(DB.session, name="Licences", category="Export"))
+flask_admin.add_view(LicenceView(DB.session, name=_l("Licences"), category="Export"))
 flask_admin.add_view(
-    ExportSchedulesView(DB.session, name="Planification des exports", category="Export")
+    ExportSchedulesView(DB.session, name=_l("Planification des exports"), category="Export")
 )
