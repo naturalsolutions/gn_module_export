@@ -14,7 +14,7 @@
             [formControl]="search"
             type="text"
             class="form-control"
-            placeholder="{{ 'Actions.Search' | translate }} un export"
+            [placeholder]="'Exports.SearchPlaceholder' | translate"
             aria-label="Search"
             aria-describedby="basic-addon1"
             data-qa="import-list-toolbar-search"
@@ -31,7 +31,7 @@
                 <h5 class="card-title">
                   <span
                     class="badge badge-info"
-                    title="ID de l'export"
+                    [title]="'Exports.ExportId' | translate"
                     data-toggle="tooltip"
                   >
                     {{ export.id }}
@@ -48,7 +48,7 @@
                       class="btn btn-primary btn-sm"
                       (click)="selectFormat(export.id, export_download)"
                     >
-                      Télécharger
+                      {{ 'Actions.Download' | translate }}
                     </button>
                     <a
                       class="btn btn-warning btn-sm"
@@ -56,7 +56,7 @@
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      API JSON
+                      {{ 'Exports.ApiJson' | translate }}
                     </a>
                     <button
                     value="click to copy"
@@ -70,7 +70,7 @@
                     [cdkCopyToClipboard]="objectToken[i]?.token"
                     (click)="t.open()"
                     >
-                      Token
+                      {{ 'Exports.Token' | translate }}
                     </button>
                   </div>
                 </div>
@@ -78,7 +78,7 @@
           </div>
         </div>
         <div *ngIf="pagination.total == 0">
-          <div class="alert alert-warning text-center">Aucun export n'est disponible</div>
+          <div class="alert alert-warning text-center">{{ 'Exports.NoExport' | translate }}</div>
         </div>
         <mat-paginator
           (page)="handlePageChange($event)"
@@ -100,13 +100,13 @@
     <div class="modal-content">
       <!-- Modal content-->
       <div class="modal-header">
-        <h4 class="modal-title">Configuration de l'export</h4>
+        <h4 class="modal-title">{{ 'Exports.Configuration' | translate }}</h4>
       </div>
 
       <div class="modal-body">
         <!-- Formulaire pour le choix des standards et des formats de téléchargement des fichiers -->
         <form [formGroup]="modalForm">
-          <label>Choisissez un format</label>
+          <label>{{ 'Exports.ChooseFormat' | translate }}</label>
           <select
             class="form-control"
             id="formatSelection"
@@ -145,11 +145,11 @@
                 class="form-check-label"
                 for="exportLicence"
               >
-                Accepter la licence
+                {{ 'Exports.AcceptLicence' | translate }}
                 <a
                   href="{{ _export.licence.url_licence }}"
-                  alt="Lire la licence"
-                  title="Lire la licence"
+                  [alt]="'Exports.ReadLicence' | translate"
+                  [title]="'Exports.ReadLicence' | translate"
                   target="_blank"
                 >
                   <b>{{ _export.licence.name_licence }}</b>
@@ -170,7 +170,7 @@
           data-dismiss="modal"
           (click)="cancel_download()"
         >
-          Annuler
+          {{ 'Actions.Cancel' | translate }}
         </button>
         <button
           [disabled]="!modalForm.valid"
@@ -179,7 +179,7 @@
           class="btn btn-success"
           (click)="download()"
         >
-          OK
+          {{ 'Exports.Ok' | translate }}
         </button>
       </div>
     </div>
