@@ -10,7 +10,8 @@ import {
 import { GN2CommonModule } from '@geonature_common/GN2Common.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
+import { I18nService } from '@geonature/shared/translate/i18n-service';
 import { ConfigService } from '@geonature/services/config.service';
 import { CustomTranslateLoader } from '@geonature/shared/translate/custom-loader';
 // import { NgbModalBackdrop } from "@ng-bootstrap/ng-bootstrap/modal/modal-backdrop";
@@ -50,4 +51,13 @@ export function createTranslateLoader(http: HttpClient, config: ConfigService) {
   providers: [ExportService],
   bootstrap: [],
 })
-export class GeonatureModule {}
+export class GeonatureModule {
+  constructor(
+    private translateService: TranslateService,
+    private i18nService: I18nService
+  ) {
+    // Workaround to force translation loaded for LazyModule.
+    // See: https://github.com/ngx-translate/core/issues/1302
+    this.i18nService.initializeModuleTranslateService(this.translateService);
+  }
+}
