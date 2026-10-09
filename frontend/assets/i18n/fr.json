@@ -1,5 +1,17 @@
 {
     "Actions": {
         "Search": "Rechercher"
+    },
+    "Exports": {
+        "ApiJson": "API JSON",
+        "Token": "Token",
+        "NoExport": "Aucun export n'est disponible",
+        "Configuration": "Configuration de l'export",
+        "ChooseFormat": "Choisissez un format",
+        "AcceptLicence": "Accepter la licence",
+        "Ok": "OK",
+        "SearchPlaceholder": "Rechercher un export",
+        "ExportId": "ID de l'export",
+        "ReadLicence": "Lire la licence"
     }
 }
