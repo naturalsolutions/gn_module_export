@@ -12,6 +12,7 @@
         "Ok": "OK",
         "SearchPlaceholder": "Rechercher un export",
         "ExportId": "ID de l'export",
-        "ReadLicence": "Lire la licence"
+        "ReadLicence": "Lire la licence",
+        "TokenCopied": "Token {{ token }} copié"
     }
 }

@@ -62,7 +62,7 @@
                     value="click to copy"
                     class="btn btn-secondary btn-sm"
                     type="button"
-                    [ngbTooltip]="'Token '+objectToken[i]?.token+' copié'"
+                    [ngbTooltip]="'Exports.TokenCopied' | translate: { token: objectToken[i]?.token }"
                     [autoClose]="'outside'"
                     triggers="manual"
                     #t="ngbTooltip"
