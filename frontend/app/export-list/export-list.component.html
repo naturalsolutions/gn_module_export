@@ -7,7 +7,7 @@
         <div class="search">
           <div class="input-group">
             <div class="input-group-prepend">
-              <div class="input-group-text"><i class="fa fa-search"></i></div>
+              <div class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></div>
             </div>
             <input
             id="search"
@@ -51,7 +51,7 @@
                       {{ 'Actions.Download' | translate }}
                     </button>
                     <a
-                      class="btn btn-warning btn-sm"
+                      class="btn btn-light btn-sm"
                       href="{{ api_endpoint }}/swagger/{{ export.id }}"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -166,7 +166,7 @@
       >
         <button
           type="submit"
-          class="btn btn-danger"
+          class="btn btn-outline-shadow"
           data-dismiss="modal"
           (click)="cancel_download()"
         >
